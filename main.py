@@ -198,6 +198,3 @@ while True:
 
     pygame.display.update()
     clock.tick(144)
-
-# TODO learn how to export game
-
