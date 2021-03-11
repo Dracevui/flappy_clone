@@ -113,9 +113,9 @@ floor_surface = pygame.image.load("assets/base.png").convert()
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
-bird_df = pygame.transform.scale2x(pygame.image.load("assets/yellowbird-downflap.png")).convert_alpha()
-bird_mf = pygame.transform.scale2x(pygame.image.load("assets/yellowbird-midflap.png")).convert_alpha()
-bird_uf = pygame.transform.scale2x(pygame.image.load("assets/yellowbird-upflap.png")).convert_alpha()
+bird_df = pygame.image.load("assets/peng-downflap.png").convert_alpha()
+bird_mf = pygame.image.load("assets/peng-midflap.png").convert_alpha()
+bird_uf = pygame.image.load("assets/peng-upflap.png").convert_alpha()
 bird_frames = [bird_df, bird_mf, bird_uf]
 bird_index = 0
 bird_surface = bird_frames[bird_index]
