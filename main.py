@@ -94,7 +94,7 @@ def pipe_score_check():
 
 # pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=1024)
 pygame.init()
-screen = pygame.display.set_mode((576, 1024))
+screen = pygame.display.set_mode((576, 1024), pygame.RESIZABLE)
 clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
 
@@ -106,10 +106,10 @@ score = 0
 hi_score = 0
 can_score = True
 
-bg_surface = pygame.image.load("assets/background-day.png").convert()
+bg_surface = pygame.image.load("assets/iceberg-background.png").convert()
 bg_surface = pygame.transform.scale2x(bg_surface)
 
-floor_surface = pygame.image.load("assets/base.png").convert()
+floor_surface = pygame.image.load("assets/ice-base.png").convert()
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
@@ -124,7 +124,7 @@ bird_rect = bird_surface.get_rect(center=(100, 512))
 BIRDFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(BIRDFLAP, 250)
 
-pipe_surface = pygame.image.load("assets/pipe-green.png").convert()
+pipe_surface = pygame.image.load("assets/icicle.png").convert_alpha()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
@@ -200,3 +200,4 @@ while True:
     clock.tick(144)
 
 # TODO learn how to export game
+
