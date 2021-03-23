@@ -34,12 +34,12 @@ def draw_pipes(pipes):
 def check_collision(pipes):
     global can_score
     for pipe in pipes:
-        if bird_rect.colliderect(pipe):
+        if sprite_rect.colliderect(pipe):
             death_sound.play()
             can_score = True
             return False
 
-    if bird_rect.top <= -100 or bird_rect.bottom >= 900:
+    if sprite_rect.top <= -100 or sprite_rect.bottom >= 900:
         death_sound.play()
         can_score = True
         return False
@@ -47,15 +47,15 @@ def check_collision(pipes):
     return True
 
 
-def rotate_bird(bird):
-    new_bird = pygame.transform.rotate(bird, -bird_mvmt * 2.5)
-    return new_bird
+def rotate_sprite(sprite):
+    new_sprite = pygame.transform.rotate(sprite, -sprite_mvmt * 2.5)
+    return new_sprite
 
 
-def bird_animation():
-    new_bird = bird_frames[bird_index]
-    new_bird_rect = new_bird.get_rect(center=(100, bird_rect.centery))
-    return new_bird, new_bird_rect
+def sprite_animation():
+    new_sprite = sprite_frames[sprite_index]
+    new_sprite_rect = new_sprite.get_rect(center=(100, sprite_rect.centery))
+    return new_sprite, new_sprite_rect
 
 
 def score_display(game_state):
@@ -106,7 +106,7 @@ WHITE = (255, 255, 255)
 
 # Game Variables
 gravity = 0.25
-bird_mvmt = 0
+sprite_mvmt = 0
 game_active = True
 score = 0
 hi_score = 0
@@ -119,18 +119,18 @@ floor_surface = pygame.image.load("assets/ice-base.png").convert()
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
-bird_df = pygame.image.load("assets/peng-downflap.png").convert_alpha()
-bird_mf = pygame.image.load("assets/peng-midflap.png").convert_alpha()
-bird_uf = pygame.image.load("assets/peng-upflap.png").convert_alpha()
-bird_frames = [bird_df, bird_mf, bird_uf]
-bird_index = 0
-bird_surface = bird_frames[bird_index]
-bird_rect = bird_surface.get_rect(center=(100, 512))
+sprite_df = pygame.image.load("assets/peng-downflap.png").convert_alpha()
+sprite_mf = pygame.image.load("assets/peng-midflap.png").convert_alpha()
+sprite_uf = pygame.image.load("assets/peng-upflap.png").convert_alpha()
+sprite_frames = [sprite_df, sprite_mf, sprite_uf]
+sprite_index = 0
+sprite_surface = sprite_frames[sprite_index]
+sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
-pygame.display.set_icon(bird_uf)
+pygame.display.set_icon(sprite_uf)
 
-BIRDFLAP = pygame.USEREVENT + 1
-pygame.time.set_timer(BIRDFLAP, 250)
+SPRITEFLAP = pygame.USEREVENT + 1
+pygame.time.set_timer(SPRITEFLAP, 250)
 
 pipe_surface = pygame.image.load("assets/icicle.png").convert_alpha()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
@@ -171,35 +171,35 @@ while running:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_active:
-                bird_mvmt = 0
-                bird_mvmt -= 9
+                sprite_mvmt = 0
+                sprite_mvmt -= 9
                 flap_sound.play()
             if event.key == pygame.K_SPACE and game_active is False:
                 game_active = True
                 pipe_list.clear()
-                bird_rect.center = (100, 512)
-                bird_mvmt = 0
+                sprite_rect.center = (100, 512)
+                sprite_mvmt = 0
                 score = 0
 
         if event.type == SPAWNPIPE:
             pipe_list.extend(create_pipe())
 
-        if event.type == BIRDFLAP:
-            if bird_index < 2:
-                bird_index += 1
+        if event.type == SPRITEFLAP:
+            if sprite_index < 2:
+                sprite_index += 1
             else:
-                bird_index = 0
+                sprite_index = 0
 
-            bird_surface, bird_rect = bird_animation()
+            sprite_surface, sprite_rect = sprite_animation()
 
     WINDOW.blit(bg_surface, (0, 0))
 
     if game_active:
-        # Bird
-        bird_mvmt += gravity
-        rotated_bird = rotate_bird(bird_surface)
-        bird_rect.centery += bird_mvmt
-        WINDOW.blit(rotated_bird, bird_rect)
+        # Sprite
+        sprite_mvmt += gravity
+        rotated_sprite = rotate_sprite(sprite_surface)
+        sprite_rect.centery += sprite_mvmt
+        WINDOW.blit(rotated_sprite, sprite_rect)
         game_active = check_collision(pipe_list)
 
         # Pipes
