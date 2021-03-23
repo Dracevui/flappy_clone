@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from level import Level
 
 
 def draw_floor():
@@ -92,7 +93,7 @@ def pipe_score_check():
                 can_score = True
 
 
-# pygame.mixer.pre_init(frequency=44100, size=16, channels=1, buffer=1024)
+# Constants
 pygame.init()
 WIDTH = 576
 HEIGHT = 1024
@@ -112,40 +113,69 @@ score = 0
 hi_score = 0
 can_score = True
 
-bg_surface = pygame.image.load("assets/iceberg-background.png").convert()
-bg_surface = pygame.transform.scale2x(bg_surface)
 
-floor_surface = pygame.image.load("assets/ice-base.png").convert()
+# Asset Files
+# bg_surface = pygame.image.load("assets/iceberg-background.png").convert()
+# floor_surface = pygame.image.load("assets/ice-base.png").convert()
+# sprite_df = pygame.image.load("assets/peng-downflap.png").convert_alpha()
+# sprite_mf = pygame.image.load("assets/peng-midflap.png").convert_alpha()
+# sprite_uf = pygame.image.load("assets/peng-upflap.png").convert_alpha()
+# pipe_surface = pygame.image.load("assets/icicle.png").convert_alpha()
+# game_over_surface = pygame.transform.scale2x(pygame.image.load("assets/message.png").convert_alpha())
+# movement_sound = pygame.mixer.Sound("sound/sfx_wing.wav")
+death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
+score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
+
+ICE_ASSETS = Level(
+    pygame.image.load("assets/iceberg-background.png").convert(),
+    pygame.image.load("assets/ice-base.png").convert(),
+    pygame.image.load("assets/icicle.png").convert_alpha(),
+    pygame.image.load("assets/peng-downflap.png").convert_alpha(),
+    pygame.image.load("assets/peng-midflap.png").convert_alpha(),
+    pygame.image.load("assets/peng-upflap.png").convert_alpha(),
+    pygame.transform.scale2x(pygame.image.load("assets/message.png").convert_alpha()),
+    pygame.mixer.Sound("sound/sfx_wing.wav")
+)
+
+bg_surface = ICE_ASSETS.background
+floor_surface = ICE_ASSETS.floor
+pipe_surface = ICE_ASSETS.pipe
+sprite_df = ICE_ASSETS.sprite1
+sprite_mf = ICE_ASSETS.sprite2
+sprite_uf = ICE_ASSETS.sprite3
+game_over_surface = ICE_ASSETS.game_over
+movement_sound = ICE_ASSETS.mvmt_sfx
+
+bg_surface = pygame.transform.scale2x(bg_surface)
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
-sprite_df = pygame.image.load("assets/peng-downflap.png").convert_alpha()
-sprite_mf = pygame.image.load("assets/peng-midflap.png").convert_alpha()
-sprite_uf = pygame.image.load("assets/peng-upflap.png").convert_alpha()
+
 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
 sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
+
 pygame.display.set_icon(sprite_uf)
+
 
 SPRITEFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(SPRITEFLAP, 250)
 
-pipe_surface = pygame.image.load("assets/icicle.png").convert_alpha()
+
 pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 pipe_height = [400, 600, 800]
 
-game_over_surface = pygame.transform.scale2x(pygame.image.load("assets/message.png").convert_alpha())
+
 game_over_rect = game_over_surface.get_rect(center=(288, 512))
 
-flap_sound = pygame.mixer.Sound("sound/sfx_wing.wav")
-death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
-score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
+
 score_sound_countdown = 100
+
 
 while not running:
     WINDOW.fill(WHITE)
@@ -173,7 +203,7 @@ while running:
             if event.key == pygame.K_SPACE and game_active:
                 sprite_mvmt = 0
                 sprite_mvmt -= 9
-                flap_sound.play()
+                movement_sound.play()
             if event.key == pygame.K_SPACE and game_active is False:
                 game_active = True
                 pipe_list.clear()
