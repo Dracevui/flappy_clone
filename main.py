@@ -157,8 +157,12 @@ while not running:
             sys.exit()
     WINDOW.blit(bg_surface, (0, 0))
     WINDOW.blit(game_over_surface, game_over_rect)
+    floor_x_pos -= 1
     draw_floor()
+    if floor_x_pos <= -576:
+        floor_x_pos = 0
     pygame.display.flip()
+    clock.tick(144)
 
 while running:
     for event in pygame.event.get():
