@@ -115,24 +115,24 @@ can_score = True
 
 # Asset Files
 ICE_ASSETS = Level(
-    pygame.image.load("assets/iceberg-background.png").convert(),
-    pygame.image.load("assets/ice-base.png").convert(),
-    pygame.image.load("assets/icicle.png").convert_alpha(),
-    pygame.image.load("assets/peng-downflap.png").convert_alpha(),
-    pygame.image.load("assets/peng-midflap.png").convert_alpha(),
-    pygame.image.load("assets/peng-upflap.png").convert_alpha(),
-    pygame.transform.scale2x(pygame.image.load("assets/message.png").convert_alpha()),
+    pygame.image.load("assets/desert-background.png").convert(),
+    pygame.image.load("assets/desert-base.png").convert(),
+    pygame.image.load("assets/dust_devil1.png").convert_alpha(),
+    pygame.image.load("assets/grasshopper_uf.png").convert_alpha(),
+    pygame.image.load("assets/grasshopper_mf.png").convert_alpha(),
+    pygame.image.load("assets/grasshopper_df.png").convert_alpha(),
+    pygame.transform.scale2x(pygame.image.load("assets/desert_message.png").convert_alpha()),
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
 DESERT_ASSETS = Level(
     pygame.image.load("assets/iceberg-background.png").convert(),
-    pygame.image.load("assets/ice-base.png").convert(),
-    pygame.image.load("assets/icicle.png").convert_alpha(),
+    pygame.image.load("assets/desert-base.png").convert(),
+    pygame.image.load("assets/dust_devil1.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_df.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_mf.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_uf.png").convert_alpha(),
-    pygame.transform.scale2x(pygame.image.load("assets/message.png").convert_alpha()),
+    pygame.transform.scale2x(pygame.image.load("assets/ice_message.png").convert_alpha()),
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
@@ -161,6 +161,10 @@ sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
 
+# dust_frames = []
+# dust_index = 0
+
+
 pygame.display.set_icon(sprite_uf)
 
 
@@ -178,9 +182,6 @@ pipe_height = [400, 600, 800]
 game_over_rect = game_over_surface.get_rect(center=(288, 512))
 
 
-score_sound_countdown = 100
-
-
 while not running:
     WINDOW.fill(WHITE)
     for event in pygame.event.get():
@@ -195,7 +196,7 @@ while not running:
     draw_floor()
     if floor_x_pos <= -576:
         floor_x_pos = 0
-    pygame.display.flip()
+    pygame.display.update()
     clock.tick(144)
 
 while running:
