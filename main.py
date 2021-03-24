@@ -115,24 +115,24 @@ can_score = True
 
 # Asset Files
 ICE_ASSETS = Level(
-    pygame.image.load("assets/desert-background.png").convert(),
-    pygame.image.load("assets/desert-base.png").convert(),
-    pygame.image.load("assets/dust_devil1.png").convert_alpha(),
-    pygame.image.load("assets/grasshopper_uf.png").convert_alpha(),
-    pygame.image.load("assets/grasshopper_mf.png").convert_alpha(),
-    pygame.image.load("assets/grasshopper_df.png").convert_alpha(),
-    pygame.transform.scale2x(pygame.image.load("assets/desert_message.png").convert_alpha()),
+    pygame.image.load("assets/iceberg-background.png").convert(),
+    pygame.image.load("assets/ice-base.png").convert(),
+    pygame.image.load("assets/icicle.png").convert_alpha(),
+    pygame.image.load("assets/peng-upflap.png").convert_alpha(),
+    pygame.image.load("assets/peng-midflap.png").convert_alpha(),
+    pygame.image.load("assets/peng-downflap.png").convert_alpha(),
+    pygame.transform.scale2x(pygame.image.load("assets/ice_message.png").convert_alpha()),
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
 DESERT_ASSETS = Level(
-    pygame.image.load("assets/iceberg-background.png").convert(),
+    pygame.image.load("assets/desert-background.png").convert(),
     pygame.image.load("assets/desert-base.png").convert(),
     pygame.image.load("assets/dust_devil1.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_df.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_mf.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_uf.png").convert_alpha(),
-    pygame.transform.scale2x(pygame.image.load("assets/ice_message.png").convert_alpha()),
+    pygame.transform.scale2x(pygame.image.load("assets/desert_message.png").convert_alpha()),
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
