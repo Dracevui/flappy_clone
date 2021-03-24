@@ -136,15 +136,26 @@ DESERT_ASSETS = Level(
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
+user_choice = "desert"
 
-bg_surface = ICE_ASSETS.background
-floor_surface = ICE_ASSETS.floor
-pipe_surface = ICE_ASSETS.pipe
-sprite_df = ICE_ASSETS.sprite1
-sprite_mf = ICE_ASSETS.sprite2
-sprite_uf = ICE_ASSETS.sprite3
-game_over_surface = ICE_ASSETS.game_over
-movement_sound = ICE_ASSETS.mvmt_sfx
+if user_choice == "Ice":
+    bg_surface = ICE_ASSETS.background
+    floor_surface = ICE_ASSETS.floor
+    pipe_surface = ICE_ASSETS.pipe
+    sprite_df = ICE_ASSETS.sprite1
+    sprite_mf = ICE_ASSETS.sprite2
+    sprite_uf = ICE_ASSETS.sprite3
+    game_over_surface = ICE_ASSETS.game_over
+    movement_sound = ICE_ASSETS.mvmt_sfx
+else:
+    bg_surface = DESERT_ASSETS.background
+    floor_surface = DESERT_ASSETS.floor
+    pipe_surface = DESERT_ASSETS.pipe
+    sprite_df = DESERT_ASSETS.sprite1
+    sprite_mf = DESERT_ASSETS.sprite2
+    sprite_uf = DESERT_ASSETS.sprite3
+    game_over_surface = DESERT_ASSETS.game_over
+    movement_sound = DESERT_ASSETS.mvmt_sfx
 
 
 death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
