@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import math
 from level import Level
 
 
@@ -95,9 +96,10 @@ def pipe_score_check():
 
 # Constants
 pygame.init()
-WIDTH = 576
-HEIGHT = 1024
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+MONITOR = pygame.display.Info()
+# WIDTH = 576
+# HEIGHT = 1024
+WINDOW = pygame.display.set_mode((math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94)))
 pygame.display.set_caption("Penglide")
 clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
@@ -136,7 +138,7 @@ DESERT_ASSETS = Level(
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
-user_choice = "desert"
+user_choice = "Desert"
 
 if user_choice == "Ice":
     bg_surface = ICE_ASSETS.background
@@ -170,10 +172,6 @@ sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
 sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
-
-
-# dust_frames = []
-# dust_index = 0
 
 
 pygame.display.set_icon(sprite_uf)
