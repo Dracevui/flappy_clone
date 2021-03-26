@@ -5,6 +5,22 @@ import random
 from level import Level
 
 
+def instruction_screen():
+    global running
+    instruction_state = False
+    while not instruction_state:
+        WINDOW.fill(WHITE)
+        for i in pygame.event.get():
+            if i.type == pygame.KEYDOWN:
+                instruction_state = True
+                running = False
+            if i.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        WINDOW.blit(instructions_surface, (0, 0))
+        pygame.display.update()
+
+
 def draw_floor():
     WINDOW.blit(floor_surface, (floor_x_pos, 900))
     WINDOW.blit(floor_surface, (floor_x_pos + 576, 900))
@@ -131,7 +147,7 @@ ICE_ASSETS = Level(
 DESERT_ASSETS = Level(
     pygame.image.load("assets/desert-background.png").convert(),
     pygame.image.load("assets/desert-base.png").convert(),
-    pygame.image.load("assets/dust_devil1.png").convert_alpha(),
+    pygame.image.load("assets/dust_devil2.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_df.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_mf.png").convert_alpha(),
     pygame.image.load("assets/grasshopper_uf.png").convert_alpha(),
@@ -139,7 +155,41 @@ DESERT_ASSETS = Level(
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
-user_choice = "Ie"
+level_select_surface = pygame.image.load("assets/level_selector.png").convert_alpha()
+level_select_surface = pygame.transform.scale2x(level_select_surface)
+ice_button_surface = pygame.image.load("assets/ice_button.png")
+ice_button_surface = pygame.transform.scale2x(ice_button_surface)
+ice_button_rect = ice_button_surface.get_rect(topleft=(5, 462))
+desert_button_surface = pygame.image.load("assets/desert_button.png")
+desert_button_surface = pygame.transform.scale2x(desert_button_surface)
+desert_button_rect = desert_button_surface.get_rect(topleft=(297, 462))
+
+instructions_surface = pygame.image.load("assets/Onscreen_Instructions.png").convert_alpha()
+instructions_surface = pygame.transform.scale(instructions_surface, (576, 1024))
+
+user_choice = ""
+
+instruction_screen()  # Displays Instruction Screen when game launches
+
+level_state = False
+while not level_state:
+    WINDOW.fill(WHITE)
+    for events in pygame.event.get():
+        if events.type == pygame.MOUSEBUTTONUP:
+            mouse_position = pygame.mouse.get_pos()
+            if desert_button_rect.collidepoint(mouse_position):
+                user_choice = "Desert"
+                level_state = True
+            elif ice_button_rect.collidepoint(mouse_position):
+                user_choice = "Ice"
+                level_state = True
+        if events.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+    WINDOW.blit(level_select_surface, (0, 0))
+    WINDOW.blit(ice_button_surface, (5, 462))
+    WINDOW.blit(desert_button_surface, (297, 462))
+    pygame.display.update()
 
 if user_choice == "Ice":
     bg_surface = ICE_ASSETS.background
@@ -164,12 +214,11 @@ else:
 death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
 score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
 
+
 bg_surface = pygame.transform.scale2x(bg_surface)
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
-instructions_surface = pygame.image.load("assets/Onscreen_Instructions.png").convert_alpha()
-instructions_surface = pygame.transform.scale(instructions_surface, (576, 1024))
 
 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
@@ -177,7 +226,8 @@ sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
 
-pygame.display.set_icon(sprite_uf)
+ICON = pygame.image.load("assets/penglide-icon.png").convert_alpha()
+pygame.display.set_icon(ICON)
 
 
 SPRITEFLAP = pygame.USEREVENT + 1
@@ -198,8 +248,6 @@ while not running:
     WINDOW.fill(WHITE)
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            # if event.key == pygame.K_SPACE:
-            #     WINDOW.blit(instructions_surface, (0,0))
             running = True
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -210,7 +258,6 @@ while not running:
     draw_floor()
     if floor_x_pos <= -576:
         floor_x_pos = 0
-    WINDOW.blit(instructions_surface, (0, 0))
     pygame.display.update()
     clock.tick(144)
 
@@ -272,4 +319,4 @@ while running:
         floor_x_pos = 0
 
     pygame.display.update()
-    clock.tick(120)
+    clock.tick(144)
