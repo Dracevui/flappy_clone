@@ -1,7 +1,7 @@
 import pygame
 import sys
 import random
-import math
+# import math
 from level import Level
 
 
@@ -97,9 +97,10 @@ def pipe_score_check():
 # Constants
 pygame.init()
 MONITOR = pygame.display.Info()
-# WIDTH = 576
-# HEIGHT = 1024
-WINDOW = pygame.display.set_mode((math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94)))
+WIDTH = 576
+HEIGHT = 1024
+# WINDOW = pygame.display.set_mode((math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94)))
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 pygame.display.set_caption("Penglide")
 clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
@@ -138,7 +139,7 @@ DESERT_ASSETS = Level(
     pygame.mixer.Sound("sound/sfx_wing.wav")
 )
 
-user_choice = "Desert"
+user_choice = "Ie"
 
 if user_choice == "Ice":
     bg_surface = ICE_ASSETS.background
@@ -157,7 +158,7 @@ else:
     sprite_mf = DESERT_ASSETS.sprite2
     sprite_uf = DESERT_ASSETS.sprite3
     game_over_surface = DESERT_ASSETS.game_over
-    movement_sound = DESERT_ASSETS.mvmt_sfx
+    movement_sound = ICE_ASSETS.mvmt_sfx
 
 
 death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
@@ -167,6 +168,8 @@ bg_surface = pygame.transform.scale2x(bg_surface)
 floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
 
+instructions_surface = pygame.image.load("assets/Onscreen_Instructions.png").convert_alpha()
+instructions_surface = pygame.transform.scale(instructions_surface, (576, 1024))
 
 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
@@ -195,6 +198,8 @@ while not running:
     WINDOW.fill(WHITE)
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+            # if event.key == pygame.K_SPACE:
+            #     WINDOW.blit(instructions_surface, (0,0))
             running = True
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -205,6 +210,7 @@ while not running:
     draw_floor()
     if floor_x_pos <= -576:
         floor_x_pos = 0
+    WINDOW.blit(instructions_surface, (0, 0))
     pygame.display.update()
     clock.tick(144)
 
@@ -266,4 +272,4 @@ while running:
         floor_x_pos = 0
 
     pygame.display.update()
-    clock.tick(144)
+    clock.tick(120)
