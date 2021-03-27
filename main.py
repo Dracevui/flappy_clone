@@ -75,20 +75,37 @@ def draw_back_buttons():
 
 
 def back_buttons_logic():
-    global user_choice
-    global running
-    global game_active
+    global user_choice, movement_sound, bg_surface, floor_surface, pipe_surface, game_over_surface, sprite_df, \
+        sprite_mf, sprite_uf, sprite_frames
     for events in pygame.event.get():
-        if events.type == pygame.MOUSEBUTTONUP:
+        if events.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
             mouse_position = pygame.mouse.get_pos()
             if ice_back_rect.collidepoint(mouse_position) or desert_back_rect.collidepoint(mouse_position):
                 level_select_screen()
                 user_choice = level_select()
-                # running = True
-                # game_active = False
+                if user_choice == "Ice":
+                    bg_surface = pygame.transform.scale2x(ICE_ASSETS.background)
+                    floor_surface = pygame.transform.scale2x(ICE_ASSETS.floor)
+                    pipe_surface = pygame.transform.scale2x(ICE_ASSETS.pipe)
+                    sprite_df = ICE_ASSETS.sprite1
+                    sprite_mf = ICE_ASSETS.sprite2
+                    sprite_uf = ICE_ASSETS.sprite3
+                    game_over_surface = ICE_ASSETS.game_over
+                    movement_sound = ICE_ASSETS.mvmt_sfx
+                else:
+                    bg_surface = pygame.transform.scale2x(DESERT_ASSETS.background)
+                    floor_surface = pygame.transform.scale2x(DESERT_ASSETS.floor)
+                    pipe_surface = pygame.transform.scale2x(DESERT_ASSETS.pipe)
+                    sprite_df = DESERT_ASSETS.sprite1
+                    sprite_mf = DESERT_ASSETS.sprite2
+                    sprite_uf = DESERT_ASSETS.sprite3
+                    game_over_surface = DESERT_ASSETS.game_over
+                    movement_sound = ICE_ASSETS.mvmt_sfx
+                sprite_frames = [sprite_df, sprite_mf, sprite_uf]
         if events.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        pygame.display.update()
 
 
 def asset_assignment(choice):
@@ -231,17 +248,13 @@ can_score = True
 ICE_ASSETS = asset_assignment("Ice")
 DESERT_ASSETS = asset_assignment("Desert")
 
+level_select_surface = pygame.transform.scale2x(pygame.image.load("assets/level_selector.png").convert_alpha())
 
-level_select_surface = pygame.image.load("assets/level_selector.png").convert_alpha()
-level_select_surface = pygame.transform.scale2x(level_select_surface)
-
-ice_button_surface = pygame.image.load("assets/ice_button.png")
-ice_button_surface = pygame.transform.scale2x(ice_button_surface)
+ice_button_surface = pygame.transform.scale2x(pygame.image.load("assets/ice_button.png"))
 ice_button_rect = ice_button_surface.get_rect(topleft=(5, 462))
 ice_button_invert = pygame.transform.scale2x((pygame.image.load("assets/ice_button_invert.png").convert_alpha()))
 
-desert_button_surface = pygame.image.load("assets/desert_button.png")
-desert_button_surface = pygame.transform.scale2x(desert_button_surface)
+desert_button_surface = pygame.transform.scale2x(pygame.image.load("assets/desert_button.png"))
 desert_button_rect = desert_button_surface.get_rect(topleft=(297, 462))
 desert_button_invert = pygame.transform.scale2x((pygame.image.load("assets/desert_button_invert.png").convert_alpha()))
 
@@ -253,7 +266,6 @@ ice_back_rect = ice_back_surface.get_rect(topleft=(5, 0))
 desert_back_surface = pygame.image.load("assets/desert_back.png").convert_alpha()
 desert_back_rect = desert_back_surface.get_rect(topleft=(5, 0))
 
-
 instruction_screen()  # shows instruction screen when game is launched
 
 level_select_screen()  # shows the level select screen
@@ -261,57 +273,46 @@ level_select_screen()  # shows the level select screen
 user_choice = level_select()  # handles the logic of level selection
 
 if user_choice == "Ice":
-    bg_surface = ICE_ASSETS.background
-    floor_surface = ICE_ASSETS.floor
-    pipe_surface = ICE_ASSETS.pipe
+    bg_surface = pygame.transform.scale2x(ICE_ASSETS.background)
+    floor_surface = pygame.transform.scale2x(ICE_ASSETS.floor)
+    pipe_surface = pygame.transform.scale2x(ICE_ASSETS.pipe)
     sprite_df = ICE_ASSETS.sprite1
     sprite_mf = ICE_ASSETS.sprite2
     sprite_uf = ICE_ASSETS.sprite3
     game_over_surface = ICE_ASSETS.game_over
     movement_sound = ICE_ASSETS.mvmt_sfx
 else:
-    bg_surface = DESERT_ASSETS.background
-    floor_surface = DESERT_ASSETS.floor
-    pipe_surface = DESERT_ASSETS.pipe
+    bg_surface = pygame.transform.scale2x(DESERT_ASSETS.background)
+    floor_surface = pygame.transform.scale2x(DESERT_ASSETS.floor)
+    pipe_surface = pygame.transform.scale2x(DESERT_ASSETS.pipe)
     sprite_df = DESERT_ASSETS.sprite1
     sprite_mf = DESERT_ASSETS.sprite2
     sprite_uf = DESERT_ASSETS.sprite3
     game_over_surface = DESERT_ASSETS.game_over
     movement_sound = ICE_ASSETS.mvmt_sfx
 
-
 death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
 score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
 
-
-bg_surface = pygame.transform.scale2x(bg_surface)
-floor_surface = pygame.transform.scale2x(floor_surface)
 floor_x_pos = 0
-
 
 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
 sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
-
 ICON = pygame.image.load("assets/penglide-icon.png").convert_alpha()
 pygame.display.set_icon(ICON)
-
 
 SPRITEFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(SPRITEFLAP, 250)
 
-
-pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
 SPAWNPIPE = pygame.USEREVENT
 pygame.time.set_timer(SPAWNPIPE, 1200)
 pipe_height = [400, 600, 800]
 
-
 game_over_rect = game_over_surface.get_rect(center=(288, 512))
-
 
 while not running:
     WINDOW.fill(WHITE)
