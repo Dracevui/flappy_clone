@@ -231,7 +231,7 @@ def draw_window():
 # Constants
 pygame.init()
 MONITOR = pygame.display.Info()
-SCREEN_DIMENSIONS = (math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94))
+SCREEN_DIMENSIONS = (math.floor(MONITOR.current_w * 0.3), math.ceil(MONITOR.current_h * 0.948))
 WINDOW = pygame.display.set_mode(SCREEN_DIMENSIONS)
 dummy_window = pygame.Surface((576, 1024))
 pygame.display.set_caption("Penglide")
@@ -239,6 +239,8 @@ clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
 running = False
 WHITE = (255, 255, 255)
+desert_button_coords = (math.ceil(WINDOW.get_width() * 0.515), math.floor(WINDOW.get_height() * 0.45))
+ice_button_coords = (math.ceil(WINDOW.get_width() * 0.009), math.floor(WINDOW.get_height() * 0.45))
 
 
 # Game Variables
@@ -256,11 +258,11 @@ DESERT_ASSETS = asset_assignment("Desert")
 level_select_surface = pygame.transform.scale2x(pygame.image.load("assets/level_selector.png").convert_alpha())
 
 ice_button_surface = pygame.transform.scale2x(pygame.image.load("assets/ice_button.png"))
-ice_button_rect = ice_button_surface.get_rect(topleft=(5, 462))
+ice_button_rect = ice_button_surface.get_rect(topleft=ice_button_coords)
 ice_button_invert = pygame.transform.scale2x((pygame.image.load("assets/ice_button_invert.png").convert_alpha()))
 
 desert_button_surface = pygame.transform.scale2x(pygame.image.load("assets/desert_button.png"))
-desert_button_rect = desert_button_surface.get_rect(topleft=(297, 462))
+desert_button_rect = desert_button_surface.get_rect(topleft=desert_button_coords)
 desert_button_invert = pygame.transform.scale2x((pygame.image.load("assets/desert_button_invert.png").convert_alpha()))
 
 instructions_surface = pygame.image.load("assets/Onscreen_Instructions.png").convert_alpha()
