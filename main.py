@@ -9,25 +9,25 @@ def instruction_screen():  # Displays Instruction Screen when game launches
     global running
     instruction_state = False
     while not instruction_state:
-        WINDOW.fill(WHITE)
+        dummy_window.fill(WHITE)
         for i in pygame.event.get():
             if i.type == pygame.KEYDOWN:
                 instruction_state = True
                 running = False
             if i.type == pygame.QUIT:
                 game_quit()
-        WINDOW.blit(instructions_surface, (0, 0))
-        pygame.display.flip()
+        dummy_window.blit(instructions_surface, (0, 0))
+        draw_window()
 
 
 def level_select_screen():
-    WINDOW.fill(WHITE)
+    dummy_window.fill(WHITE)
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
             game_quit()
-    WINDOW.blit(level_select_surface, (0, 0))
-    WINDOW.blit(ice_button_surface, (5, 462))
-    WINDOW.blit(desert_button_surface, (297, 462))
+    dummy_window.blit(level_select_surface, (0, 0))
+    dummy_window.blit(ice_button_surface, (5, 462))
+    dummy_window.blit(desert_button_surface, (297, 462))
 
 
 def level_select():
@@ -51,23 +51,23 @@ def level_button_hover():
     for events in pygame.event.get():
         if events.type == pygame.MOUSEMOTION:
             if desert_button_rect.collidepoint(pygame.mouse.get_pos()):
-                WINDOW.blit(desert_button_invert, (297, 462))
+                dummy_window.blit(desert_button_invert, (297, 462))
             if ice_button_rect.collidepoint(pygame.mouse.get_pos()):
-                WINDOW.blit(ice_button_invert, (5, 462))
+                dummy_window.blit(ice_button_invert, (5, 462))
             if not desert_button_rect.collidepoint(pygame.mouse.get_pos()):
-                WINDOW.blit(desert_button_surface, (297, 462))
+                dummy_window.blit(desert_button_surface, (297, 462))
             if not ice_button_rect.collidepoint(pygame.mouse.get_pos()):
-                WINDOW.blit(ice_button_surface, (5, 462))
-            pygame.display.update()
+                dummy_window.blit(ice_button_surface, (5, 462))
+            draw_window()
         if events.type == pygame.QUIT:
             game_quit()
 
 
 def draw_back_buttons():
     if user_choice == "Ice":
-        WINDOW.blit(ice_back_surface, (5, 0))
+        dummy_window.blit(ice_back_surface, (5, 0))
     else:
-        WINDOW.blit(desert_back_surface, (5, 0))
+        dummy_window.blit(desert_back_surface, (5, 0))
 
 
 def back_buttons_logic():
@@ -100,7 +100,6 @@ def back_buttons_logic():
                 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
         if events.type == pygame.QUIT:
             game_quit()
-        pygame.display.update()
 
 
 def game_quit():
@@ -135,8 +134,8 @@ def asset_assignment(choice):
 
 
 def draw_floor():  # Draws the floor asset onto the game window
-    WINDOW.blit(floor_surface, (floor_x_pos, 900))
-    WINDOW.blit(floor_surface, (floor_x_pos + 576, 900))
+    dummy_window.blit(floor_surface, (floor_x_pos, 900))
+    dummy_window.blit(floor_surface, (floor_x_pos + 576, 900))
 
 
 def create_pipe():  # Creates a pipe in a random position and adds it to the pipe list variable
@@ -156,10 +155,10 @@ def move_pipes(pipes):  # Moves the pipes along the screen
 def draw_pipes(pipes):  # Draws the pipes onto the game window
     for pipe in pipes:
         if pipe.bottom >= 1024:
-            WINDOW.blit(pipe_surface, pipe)
+            dummy_window.blit(pipe_surface, pipe)
         else:
             flip_pipe = pygame.transform.flip(pipe_surface, False, True)
-            WINDOW.blit(flip_pipe, pipe)
+            dummy_window.blit(flip_pipe, pipe)
 
 
 def check_collision(pipes):  # Handles the logic of game collision
@@ -193,15 +192,15 @@ def score_display(game_state):  # Writes out the current score and high score on
     if game_state == "main_game":
         score_surface = game_font.render(str(int(score)), True, (255, 255, 255))
         score_rect = score_surface.get_rect(center=(288, 100))
-        WINDOW.blit(score_surface, score_rect)
+        dummy_window.blit(score_surface, score_rect)
     if game_state == "game_over":
         score_surface = game_font.render(f"Score: {int(score)}", True, (255, 255, 255))
         score_rect = score_surface.get_rect(center=(288, 100))
-        WINDOW.blit(score_surface, score_rect)
+        dummy_window.blit(score_surface, score_rect)
 
         high_score_surface = game_font.render(f"High Score: {int(hi_score)}", True, (255, 255, 255))
         high_score_rect = high_score_surface.get_rect(center=(288, 850))
-        WINDOW.blit(high_score_surface, high_score_rect)
+        dummy_window.blit(high_score_surface, high_score_rect)
 
 
 def update_score(scores, high_score):  # Handles the logic of updating the high score
@@ -223,17 +222,24 @@ def pipe_score_check():  # Checks to see if the current position of the characte
                 can_score = True
 
 
+def draw_window():
+    frame = pygame.transform.scale(dummy_window, SCREEN_DIMENSIONS)
+    WINDOW.blit(frame, frame.get_rect())
+    pygame.display.flip()
+    
+
 # Constants
 pygame.init()
 MONITOR = pygame.display.Info()
-WIDTH = 576
-HEIGHT = 1024
-WINDOW = pygame.display.set_mode((math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94)))
+SCREEN_DIMENSIONS = (math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94))
+WINDOW = pygame.display.set_mode(SCREEN_DIMENSIONS)
+dummy_window = pygame.Surface((576, 1024))
 pygame.display.set_caption("Penglide")
 clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
 running = False
 WHITE = (255, 255, 255)
+
 
 # Game Variables
 gravity = 0.25
@@ -314,19 +320,19 @@ pipe_height = [400, 600, 800]
 game_over_rect = game_over_surface.get_rect(center=(288, 512))
 
 while not running:
-    WINDOW.fill(WHITE)
+    dummy_window.fill(WHITE)
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             running = True
         if event.type == pygame.QUIT:
             game_quit()
-    WINDOW.blit(bg_surface, (0, 0))
-    WINDOW.blit(game_over_surface, game_over_rect)
+    dummy_window.blit(bg_surface, (0, 0))
+    dummy_window.blit(game_over_surface, game_over_rect)
     floor_x_pos -= 1
     draw_floor()
     if floor_x_pos <= -576:
         floor_x_pos = 0
-    pygame.display.update()
+    draw_window()
     clock.tick(144)
 
 while running:
@@ -356,14 +362,14 @@ while running:
 
             sprite_surface, sprite_rect = sprite_animation()
 
-    WINDOW.blit(bg_surface, (0, 0))
+    dummy_window.blit(bg_surface, (0, 0))
 
     if game_active:
         # Sprite
         sprite_mvmt += gravity
         rotated_sprite = rotate_sprite(sprite_surface)
         sprite_rect.centery += sprite_mvmt
-        WINDOW.blit(rotated_sprite, sprite_rect)
+        dummy_window.blit(rotated_sprite, sprite_rect)
         game_active = check_collision(pipe_list)
 
         # Pipes
@@ -375,7 +381,7 @@ while running:
         score_display("main_game")
 
     else:
-        WINDOW.blit(game_over_surface, game_over_rect, draw_back_buttons())
+        dummy_window.blit(game_over_surface, game_over_rect, draw_back_buttons())
         hi_score = update_score(score, hi_score)
         score_display("game_over")
         back_buttons_logic()
@@ -386,5 +392,5 @@ while running:
     if floor_x_pos <= -576:
         floor_x_pos = 0
 
-    pygame.display.update()
+    draw_window()
     clock.tick(144)
