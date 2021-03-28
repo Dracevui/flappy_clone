@@ -15,8 +15,7 @@ def instruction_screen():  # Displays Instruction Screen when game launches
                 instruction_state = True
                 running = False
             if i.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                game_quit()
         WINDOW.blit(instructions_surface, (0, 0))
         pygame.display.flip()
 
@@ -25,12 +24,10 @@ def level_select_screen():
     WINDOW.fill(WHITE)
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit()
     WINDOW.blit(level_select_surface, (0, 0))
     WINDOW.blit(ice_button_surface, (5, 462))
     WINDOW.blit(desert_button_surface, (297, 462))
-    # pygame.display.update()
 
 
 def level_select():
@@ -63,8 +60,7 @@ def level_button_hover():
                 WINDOW.blit(ice_button_surface, (5, 462))
             pygame.display.update()
         if events.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit()
 
 
 def draw_back_buttons():
@@ -103,9 +99,13 @@ def back_buttons_logic():
                     movement_sound = ICE_ASSETS.mvmt_sfx
                 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
         if events.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit()
         pygame.display.update()
+
+
+def game_quit():
+    pygame.quit()
+    sys.exit()
 
 
 def asset_assignment(choice):
@@ -228,7 +228,6 @@ pygame.init()
 MONITOR = pygame.display.Info()
 WIDTH = 576
 HEIGHT = 1024
-# WINDOW = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
 WINDOW = pygame.display.set_mode((math.floor(MONITOR.current_w * 0.3), math.floor(MONITOR.current_h * 0.94)))
 pygame.display.set_caption("Penglide")
 clock = pygame.time.Clock()
@@ -320,8 +319,7 @@ while not running:
         if event.type == pygame.KEYDOWN:
             running = True
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit()
     WINDOW.blit(bg_surface, (0, 0))
     WINDOW.blit(game_over_surface, game_over_rect)
     floor_x_pos -= 1
@@ -334,8 +332,7 @@ while not running:
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_active:
                 sprite_mvmt = 0
