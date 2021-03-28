@@ -239,8 +239,8 @@ clock = pygame.time.Clock()
 game_font = pygame.font.Font("04B_19.TTF", 40)
 running = False
 WHITE = (255, 255, 255)
-desert_button_coords = (math.ceil(WINDOW.get_width() * 0.515), math.floor(WINDOW.get_height() * 0.45))
-ice_button_coords = (math.ceil(WINDOW.get_width() * 0.009), math.floor(WINDOW.get_height() * 0.45))
+desert_button_coords = (math.floor(WINDOW.get_width() * 0.515), math.floor(WINDOW.get_height() * 0.45))
+ice_button_coords = (math.floor(WINDOW.get_width() * 0.009), math.floor(WINDOW.get_height() * 0.45))
 
 
 # Game Variables
