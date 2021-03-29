@@ -254,6 +254,8 @@ can_score = True
 # Asset Files
 ICE_ASSETS = asset_assignment("Ice")
 DESERT_ASSETS = asset_assignment("Desert")
+ICON = pygame.image.load("assets/penglide-icon.png").convert_alpha()
+pygame.display.set_icon(ICON)
 
 level_select_surface = pygame.transform.scale2x(pygame.image.load("assets/level_selector.png").convert_alpha())
 
@@ -307,9 +309,6 @@ sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
 sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
-
-ICON = pygame.image.load("assets/penglide-icon.png").convert_alpha()
-pygame.display.set_icon(ICON)
 
 SPRITEFLAP = pygame.USEREVENT + 1
 pygame.time.set_timer(SPRITEFLAP, 250)
