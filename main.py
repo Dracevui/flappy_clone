@@ -9,28 +9,28 @@ def instruction_screen():  # Displays Instruction Screen when game launches
     global running
     instruction_state = False
     while not instruction_state:
-        dummy_window.fill(WHITE)
+        DUMMY_WINDOW.fill(WHITE)
         for i in pygame.event.get():
             if i.type == pygame.KEYDOWN:
                 instruction_state = True
                 running = False
             if i.type == pygame.QUIT:
                 game_quit()
-        dummy_window.blit(instructions_surface, (0, 0))
+        DUMMY_WINDOW.blit(instructions_surface, (0, 0))
         draw_window()
 
 
-def level_select_screen():
-    dummy_window.fill(WHITE)
+def level_select_screen():  # Draws the level select buttons and background asset onto the game window
+    DUMMY_WINDOW.fill(WHITE)
     for events in pygame.event.get():
         if events.type == pygame.QUIT:
             game_quit()
-    dummy_window.blit(level_select_surface, (0, 0))
-    dummy_window.blit(ice_button_surface, (5, 462))
-    dummy_window.blit(desert_button_surface, (297, 462))
+    DUMMY_WINDOW.blit(level_select_surface, (0, 0))
+    DUMMY_WINDOW.blit(ice_button_surface, (5, 462))
+    DUMMY_WINDOW.blit(desert_button_surface, (297, 462))
 
 
-def level_select():
+def level_select():  # Handles the logic of selecting a level
     level_state = False
     choice = ""
     while not level_state:
@@ -47,32 +47,32 @@ def level_select():
     return choice
 
 
-def level_button_hover():
+def level_button_hover():  # Changes the colour of the level select buttons when hovered over with a mouse
     for events in pygame.event.get():
         if events.type == pygame.MOUSEMOTION:
-            dummy_window.blit(desert_button_invert, (297, 462)) if \
+            DUMMY_WINDOW.blit(desert_button_invert, (297, 462)) if \
                 desert_button_rect.collidepoint(pygame.mouse.get_pos()) else \
-                dummy_window.blit(desert_button_surface, (297, 462))
-            dummy_window.blit(ice_button_invert, (5, 462)) if \
+                DUMMY_WINDOW.blit(desert_button_surface, (297, 462))
+            DUMMY_WINDOW.blit(ice_button_invert, (5, 462)) if \
                 ice_button_rect.collidepoint(pygame.mouse.get_pos()) else \
-                dummy_window.blit(ice_button_surface, (5, 462))
+                DUMMY_WINDOW.blit(ice_button_surface, (5, 462))
             draw_window()
         if events.type == pygame.QUIT:
             game_quit()
 
 
-def draw_back_buttons():
+def draw_back_buttons():  # Draws the back button asset onto the game window
     if user_choice == "Ice":
-        dummy_window.blit(ice_back_surface, (5, 0))
+        DUMMY_WINDOW.blit(ice_back_surface, (5, 0))
     else:
-        dummy_window.blit(desert_back_surface, (5, 0))
+        DUMMY_WINDOW.blit(desert_back_surface, (5, 0))
 
 
-def back_buttons_logic():
+def back_buttons_logic():  # Handles the logic of reselecting a level
     global user_choice, movement_sound, bg_surface, floor_surface, pipe_surface, game_over_surface, sprite_df, \
         sprite_mf, sprite_uf, sprite_frames
     for events in pygame.event.get():
-        if events.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYDOWN and event.key == pygame.K_BACKSPACE:
+        if events.type == pygame.MOUSEBUTTONUP or events.type == pygame.KEYDOWN and events.key == pygame.K_BACKSPACE:
             mouse_position = pygame.mouse.get_pos()
             if ice_back_rect.collidepoint(mouse_position) or desert_back_rect.collidepoint(mouse_position):
                 level_select_screen()
@@ -100,12 +100,28 @@ def back_buttons_logic():
             game_quit()
 
 
-def game_quit():
+def start_screen():
+    global running, floor_x_pos
+    while not running:  # Shows the start screen
+        DUMMY_WINDOW.fill(WHITE)
+        for i in pygame.event.get():
+            if i.type == pygame.KEYDOWN:
+                running = True
+            if i.type == pygame.QUIT:
+                game_quit()
+        DUMMY_WINDOW.blit(bg_surface, (0, 0))
+        DUMMY_WINDOW.blit(game_over_surface, game_over_rect)
+        move_floor()
+        draw_window()
+        CLOCK.tick(144)
+
+
+def game_quit():  # Quits the game when called
     pygame.quit()
     sys.exit()
 
 
-def asset_assignment(choice):
+def asset_assignment(choice):  # Loads in the called upon game assets
     if choice == "Desert":
         asset = Level(
             pygame.image.load("assets/desert-background.png").convert(),
@@ -132,8 +148,16 @@ def asset_assignment(choice):
 
 
 def draw_floor():  # Draws the floor asset onto the game window
-    dummy_window.blit(floor_surface, (floor_x_pos, 900))
-    dummy_window.blit(floor_surface, (floor_x_pos + 576, 900))
+    DUMMY_WINDOW.blit(floor_surface, (floor_x_pos, 900))
+    DUMMY_WINDOW.blit(floor_surface, (floor_x_pos + 576, 900))
+
+
+def move_floor():  # Moves the floor asset along the bottom of the game window to create the illusion of animation
+    global floor_x_pos
+    floor_x_pos -= 1
+    draw_floor()
+    if floor_x_pos <= -576:
+        floor_x_pos = 0
 
 
 def create_pipe():  # Creates a pipe in a random position and adds it to the pipe list variable
@@ -153,10 +177,10 @@ def move_pipes(pipes):  # Moves the pipes along the screen
 def draw_pipes(pipes):  # Draws the pipes onto the game window
     for pipe in pipes:
         if pipe.bottom >= 1024:
-            dummy_window.blit(pipe_surface, pipe)
+            DUMMY_WINDOW.blit(pipe_surface, pipe)
         else:
             flip_pipe = pygame.transform.flip(pipe_surface, False, True)
-            dummy_window.blit(flip_pipe, pipe)
+            DUMMY_WINDOW.blit(flip_pipe, pipe)
 
 
 def check_collision(pipes):  # Handles the logic of game collision
@@ -188,17 +212,17 @@ def sprite_animation():  # Animates the sprite for immersion purposes
 
 def score_display(game_state):  # Writes out the current score and high score onto the game window
     if game_state == "main_game":
-        score_surface = game_font.render(str(int(score)), True, (255, 255, 255))
+        score_surface = GAME_FONT.render(str(int(score)), True, (255, 255, 255))
         score_rect = score_surface.get_rect(center=(288, 100))
-        dummy_window.blit(score_surface, score_rect)
+        DUMMY_WINDOW.blit(score_surface, score_rect)
     if game_state == "game_over":
-        score_surface = game_font.render(f"Score: {int(score)}", True, (255, 255, 255))
+        score_surface = GAME_FONT.render(f"Score: {int(score)}", True, (255, 255, 255))
         score_rect = score_surface.get_rect(center=(288, 100))
-        dummy_window.blit(score_surface, score_rect)
+        DUMMY_WINDOW.blit(score_surface, score_rect)
 
-        high_score_surface = game_font.render(f"High Score: {int(hi_score)}", True, (255, 255, 255))
+        high_score_surface = GAME_FONT.render(f"High Score: {int(hi_score)}", True, (255, 255, 255))
         high_score_rect = high_score_surface.get_rect(center=(288, 850))
-        dummy_window.blit(high_score_surface, high_score_rect)
+        DUMMY_WINDOW.blit(high_score_surface, high_score_rect)
 
 
 def update_score(scores, high_score):  # Handles the logic of updating the high score
@@ -220,34 +244,105 @@ def pipe_score_check():  # Checks to see if the current position of the characte
                 can_score = True
 
 
-def draw_window():
-    frame = pygame.transform.scale(dummy_window, SCREEN_DIMENSIONS)
+def draw_window():  # Resizes the game window to fit the user's monitor dimensions
+    frame = pygame.transform.scale(DUMMY_WINDOW, SCREEN_DIMENSIONS)
     WINDOW.blit(frame, frame.get_rect())
     pygame.display.flip()
-    
+
+
+def main():  # The main game loop that handles the primary logic of the actual game itself
+    global running, game_active, pipe_list, sprite_rect, sprite_index, sprite_mvmt, sprite_surface, score, hi_score, \
+        floor_x_pos
+    while running:
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                game_quit()
+            if i.type == pygame.KEYDOWN:
+                if i.key == pygame.K_SPACE and game_active:
+                    sprite_mvmt = 0
+                    sprite_mvmt -= 9
+                    movement_sound.play()
+                if i.key == pygame.K_SPACE and game_active is False:
+                    game_active = True
+                    pipe_list.clear()
+                    sprite_rect.center = (100, 512)
+                    sprite_mvmt = 0
+                    score = 0
+
+            if i.type == SPAWNPIPE:
+                pipe_list.extend(create_pipe())
+
+            if i.type == SPRITEFLAP:
+                if sprite_index < 2:
+                    sprite_index += 1
+                else:
+                    sprite_index = 0
+
+                sprite_surface, sprite_rect = sprite_animation()
+
+        DUMMY_WINDOW.blit(bg_surface, (0, 0))
+
+        if game_active:
+            # Sprite
+            sprite_mvmt += gravity
+            rotated_sprite = rotate_sprite(sprite_surface)
+            sprite_rect.centery += sprite_mvmt
+            DUMMY_WINDOW.blit(rotated_sprite, sprite_rect)
+            game_active = check_collision(pipe_list)
+
+            # Pipes
+            pipe_list = move_pipes(pipe_list)
+            draw_pipes(pipe_list)
+
+            # Score
+            pipe_score_check()
+            score_display("main_game")
+
+        else:
+            DUMMY_WINDOW.blit(game_over_surface, game_over_rect, draw_back_buttons())
+            hi_score = update_score(score, hi_score)
+            score_display("game_over")
+            back_buttons_logic()
+
+        # Floor
+        move_floor()
+
+        draw_window()
+        CLOCK.tick(144)
+
 
 # Constants
 pygame.init()
 MONITOR = pygame.display.Info()
 SCREEN_DIMENSIONS = (math.floor(MONITOR.current_w * 0.3), math.ceil(MONITOR.current_h * 0.948))
 WINDOW = pygame.display.set_mode(SCREEN_DIMENSIONS)
-dummy_window = pygame.Surface((576, 1024))
-pygame.display.set_caption("Penglide")
-clock = pygame.time.Clock()
-game_font = pygame.font.Font("04B_19.TTF", 40)
-running = False
+DUMMY_WINDOW = pygame.Surface((576, 1024))
+CLOCK = pygame.time.Clock()
+GAME_FONT = pygame.font.Font("04B_19.TTF", 40)
 WHITE = (255, 255, 255)
-desert_button_coords = (math.floor(WINDOW.get_width() * 0.515), math.floor(WINDOW.get_height() * 0.45))
-ice_button_coords = (math.floor(WINDOW.get_width() * 0.009), math.floor(WINDOW.get_height() * 0.45))
+DESERT_BUTTON_COORDS = (math.floor(WINDOW.get_width() * 0.515), math.floor(WINDOW.get_height() * 0.45))
+ICE_BUTTON_COORDS = (math.floor(WINDOW.get_width() * 0.009), math.floor(WINDOW.get_height() * 0.45))
+pygame.display.set_caption("Penglide")
 
 
 # Game Variables
 gravity = 0.25
 sprite_mvmt = 0
-game_active = True
 score = 0
 hi_score = 0
+game_active = True
 can_score = True
+running = False
+floor_x_pos = 0
+
+SPRITEFLAP = pygame.USEREVENT + 1
+pygame.time.set_timer(SPRITEFLAP, 250)
+
+pipe_list = []
+SPAWNPIPE = pygame.USEREVENT
+pygame.time.set_timer(SPAWNPIPE, 1200)
+pipe_height = [400, 600, 800]
+
 
 # Asset Files
 ICE_ASSETS = asset_assignment("Ice")
@@ -258,11 +353,11 @@ pygame.display.set_icon(ICON)
 level_select_surface = pygame.transform.scale2x(pygame.image.load("assets/level_selector.png").convert_alpha())
 
 ice_button_surface = pygame.transform.scale2x(pygame.image.load("assets/ice_button.png"))
-ice_button_rect = ice_button_surface.get_rect(topleft=ice_button_coords)
+ice_button_rect = ice_button_surface.get_rect(topleft=ICE_BUTTON_COORDS)
 ice_button_invert = pygame.transform.scale2x((pygame.image.load("assets/ice_button_invert.png").convert_alpha()))
 
 desert_button_surface = pygame.transform.scale2x(pygame.image.load("assets/desert_button.png"))
-desert_button_rect = desert_button_surface.get_rect(topleft=desert_button_coords)
+desert_button_rect = desert_button_surface.get_rect(topleft=DESERT_BUTTON_COORDS)
 desert_button_invert = pygame.transform.scale2x((pygame.image.load("assets/desert_button_invert.png").convert_alpha()))
 
 instructions_surface = pygame.image.load("assets/Onscreen_Instructions.png").convert_alpha()
@@ -273,6 +368,11 @@ ice_back_rect = ice_back_surface.get_rect(topleft=(5, 0))
 desert_back_surface = pygame.image.load("assets/desert_back.png").convert_alpha()
 desert_back_rect = desert_back_surface.get_rect(topleft=(5, 0))
 
+death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
+score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
+
+
+# start of the main game...
 instruction_screen()  # shows instruction screen when game is launched
 
 level_select_screen()  # shows the level select screen
@@ -298,98 +398,16 @@ else:
     game_over_surface = DESERT_ASSETS.game_over
     movement_sound = ICE_ASSETS.mvmt_sfx
 
-death_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
-score_sound = pygame.mixer.Sound("sound/sfx_point.wav")
-
-floor_x_pos = 0
-
+game_over_rect = game_over_surface.get_rect(center=(288, 512))
 sprite_frames = [sprite_df, sprite_mf, sprite_uf]
 sprite_index = 0
 sprite_surface = sprite_frames[sprite_index]
 sprite_rect = sprite_surface.get_rect(center=(100, 512))
 
-SPRITEFLAP = pygame.USEREVENT + 1
-pygame.time.set_timer(SPRITEFLAP, 250)
+start_screen()  # Shows the start screen before the game session begins
 
-pipe_list = []
-SPAWNPIPE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNPIPE, 1200)
-pipe_height = [400, 600, 800]
+main()  # The main game loop
 
-game_over_rect = game_over_surface.get_rect(center=(288, 512))
 
-while not running:
-    dummy_window.fill(WHITE)
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            running = True
-        if event.type == pygame.QUIT:
-            game_quit()
-    dummy_window.blit(bg_surface, (0, 0))
-    dummy_window.blit(game_over_surface, game_over_rect)
-    floor_x_pos -= 1
-    draw_floor()
-    if floor_x_pos <= -576:
-        floor_x_pos = 0
-    draw_window()
-    clock.tick(144)
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game_quit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and game_active:
-                sprite_mvmt = 0
-                sprite_mvmt -= 9
-                movement_sound.play()
-            if event.key == pygame.K_SPACE and game_active is False:
-                game_active = True
-                pipe_list.clear()
-                sprite_rect.center = (100, 512)
-                sprite_mvmt = 0
-                score = 0
-
-        if event.type == SPAWNPIPE:
-            pipe_list.extend(create_pipe())
-
-        if event.type == SPRITEFLAP:
-            if sprite_index < 2:
-                sprite_index += 1
-            else:
-                sprite_index = 0
-
-            sprite_surface, sprite_rect = sprite_animation()
-
-    dummy_window.blit(bg_surface, (0, 0))
-
-    if game_active:
-        # Sprite
-        sprite_mvmt += gravity
-        rotated_sprite = rotate_sprite(sprite_surface)
-        sprite_rect.centery += sprite_mvmt
-        dummy_window.blit(rotated_sprite, sprite_rect)
-        game_active = check_collision(pipe_list)
-
-        # Pipes
-        pipe_list = move_pipes(pipe_list)
-        draw_pipes(pipe_list)
-
-        # Score
-        pipe_score_check()
-        score_display("main_game")
-
-    else:
-        dummy_window.blit(game_over_surface, game_over_rect, draw_back_buttons())
-        hi_score = update_score(score, hi_score)
-        score_display("game_over")
-        back_buttons_logic()
-
-    # Floor
-    floor_x_pos -= 1
-    draw_floor()
-    if floor_x_pos <= -576:
-        floor_x_pos = 0
-
-    draw_window()
-    clock.tick(144)
+if __name__ == "__main__":
+    main()
