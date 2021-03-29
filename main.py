@@ -50,13 +50,11 @@ def level_select():
 def level_button_hover():
     for events in pygame.event.get():
         if events.type == pygame.MOUSEMOTION:
-            if desert_button_rect.collidepoint(pygame.mouse.get_pos()):
-                dummy_window.blit(desert_button_invert, (297, 462))
-            if ice_button_rect.collidepoint(pygame.mouse.get_pos()):
-                dummy_window.blit(ice_button_invert, (5, 462))
-            if not desert_button_rect.collidepoint(pygame.mouse.get_pos()):
+            dummy_window.blit(desert_button_invert, (297, 462)) if \
+                desert_button_rect.collidepoint(pygame.mouse.get_pos()) else \
                 dummy_window.blit(desert_button_surface, (297, 462))
-            if not ice_button_rect.collidepoint(pygame.mouse.get_pos()):
+            dummy_window.blit(ice_button_invert, (5, 462)) if \
+                ice_button_rect.collidepoint(pygame.mouse.get_pos()) else \
                 dummy_window.blit(ice_button_surface, (5, 462))
             draw_window()
         if events.type == pygame.QUIT:
