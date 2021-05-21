@@ -108,7 +108,6 @@ def back_buttons_logic():  # Handles the logic of reselecting a level
 def start_screen():  # Shows the start screen
     global running, floor_x_pos
     while not running:
-        DUMMY_WINDOW.fill(WHITE)
         for i in pygame.event.get():
             if i.type == pygame.KEYDOWN:
                 running = True
@@ -146,7 +145,7 @@ def asset_assignment(choice):  # Loads in the called upon game assets
             pygame.image.load("assets/peng-upflap.png").convert_alpha(),
             pygame.image.load("assets/peng-midflap.png").convert_alpha(),
             pygame.image.load("assets/peng-downflap.png").convert_alpha(),
-            pygame.transform.scale2x(pygame.image.load("assets/ice_message.png").convert_alpha()),
+            pygame.image.load("assets/ice_message.png").convert_alpha(),
             pygame.mixer.Sound("sound/sfx_wing.wav")
         )
     return asset
@@ -271,7 +270,7 @@ def sprite_jump():  # Handles the sprite jumping logic
 
 
 def game_clear():  # Clears all the relevant game variables to start a new game session
-    global game_active, sprite_mvmt, score
+    global game_active, sprite_mvmt, score, pipe_list
     game_active = True
     pipe_list.clear()
     sprite_rect.center = (100, 512)
@@ -325,8 +324,6 @@ def game_over():  # Shows the game over screen once the current session dies
 
 
 def main():  # The main game loop that handles the primary logic of the actual game itself
-    global running, game_active, pipe_list, sprite_rect, sprite_index, sprite_mvmt, sprite_surface, score, hi_score, \
-        floor_x_pos
     while running:
         DUMMY_WINDOW.blit(bg_surface, (0, 0))
 
@@ -339,6 +336,7 @@ def main():  # The main game loop that handles the primary logic of the actual g
         move_floor()
 
         draw_window()
+
         CLOCK.tick(144)
 
 
